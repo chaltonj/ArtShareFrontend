@@ -1,0 +1,8 @@
+.name__button {
+    display: flex;
+    justify-content: flex-end;
+}
+
+.submitname__containergrid {
+    padding: 40px;
+}
