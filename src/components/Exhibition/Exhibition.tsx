@@ -93,7 +93,7 @@ export default class Exhibition extends React.Component<any, IExhibitionState> {
                     </Grid>
                     ))}
                     <Grid item={ true } key={ "add piece" } xs={12} sm={6}>
-                        <Card className={ "exhbition__card" } >
+                        <Card className={ "exhbition__card" }>
                             <CardActionArea className="exhibition_cardactionarea" href="/create">
                             <CardMedia
                                 className={ "exhbition__cardmedia exhibition_plusbutton"}

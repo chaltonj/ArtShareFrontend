@@ -15,5 +15,5 @@ export interface ICurator {
 }
 
 export const config =  {
-    baseUrl: "http://127.0.0.1:5000/"
+    baseUrl: "http://artshare-backend-b2.azurewebsites.net/"
 }
