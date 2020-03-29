@@ -13,6 +13,6 @@ module.exports = async function (context, req) {
     }
     catch (err)
     {
-        context.res = { error : err.message }
+        context.res = { error : "an error has occured :(" }
     }
 };
