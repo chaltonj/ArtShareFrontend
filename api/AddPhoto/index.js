@@ -2,7 +2,7 @@ var multipart = require("parse-multipart");
 
 module.exports = async function (context, req) {
     var bodyBuffer = Buffer.from(req.body);
-    context.res = { body: req.body, status: 500};
+    context.res = { body: req.headers, status: 500};
     context.done();
     // var boundary = multipart.getBoundary(req.headers['content-type']);
 
