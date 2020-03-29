@@ -7,22 +7,26 @@ import {
     from '@material-ui/core';
 import * as React from 'react';
 
-import "../Exhibition/Exhibition.css";
+import "./ArtCard.css";
 
-interface IShowArtDetailsProps {
+interface IArtCardProps {
     imgUrl: string
     artName: string,
-    artistName: string
+    artistName: string,
+    curatorName?: string,
+    curatorNotes?: string
 }
 
-export default class ShowArtDetails extends React.Component<IShowArtDetailsProps> {
+export default class ArtCard extends React.Component<IArtCardProps> {
 
     public render() {
+        const shouldRenderCurator = this.props.curatorName && this.props.curatorNotes;
+
         return (
             <React.Fragment>
-                <Card className={ "exhbition__card" }>
+                <Card className={ "artcard__card" }>
                     <CardMedia
-                        className={ "exhbition__cardmedia"}
+                        className={ "artcard__cardmedia"}
                         image={ this.props.imgUrl }
                         title={ this.props.artName }
                     />
@@ -33,6 +37,11 @@ export default class ShowArtDetails extends React.Component<IShowArtDetailsProps
                         <Typography color="textSecondary" paragraph={ true }>
                         { this.props.artistName }
                         </Typography>
+                        { shouldRenderCurator && 
+                            <Typography color="textSecondary">
+                                <Typography color="textPrimary" display="inline">{this.props.curatorName}:</Typography> "{this.props.curatorNotes}"
+                            </Typography>
+                        }
                     </CardContent>
                 </Card>
             </React.Fragment>

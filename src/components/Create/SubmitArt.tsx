@@ -8,10 +8,10 @@ import axios from 'axios';
 import * as React from 'react';
 
 import { config, IArtItem } from 'src/data/models';
+import { ArtCard } from "../../components";
 import AddArtDetails from "./AddArtDetails";
 import AddPersonalDetails from "./AddPersonalDetails";
 import "./Create.css";
-import ShowArtDetails from "./ShowArtDetails";
 
 enum SubmitStage {
     ChooseArt = 1,
@@ -118,7 +118,7 @@ export default class SubmitArt extends React.Component<any, ISubmitArtState> {
                     />
                 ) : (
                     <React.Fragment>
-                        <ShowArtDetails
+                        <ArtCard
                             imgUrl={ this.state.artPhotoUrl }
                             artName={ this.state.artName }
                             artistName={ this.state.artistName }
