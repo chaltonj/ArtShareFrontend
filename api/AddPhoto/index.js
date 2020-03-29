@@ -6,7 +6,15 @@ module.exports = async function (context, req) {
 
     // parse the body
     var parts = multipart.Parse(bodyBuffer, boundary);
-    context.res = { body : { name : parts[0].filename, type: parts[0].type, data: parts[0].data.length}}; 
+    if (parts == null || parts === undefined || parts.length <= 0)
+    {
+        console.error(parts);
+        context.res = { status: 500, body: "parts were undefined" }
+    }
+    else
+    {
+        context.res = { body : { name : parts[0].filename, type: parts[0].type, data: parts[0].data.length}}; 
+    }
+
     context.done();
-    
 };
