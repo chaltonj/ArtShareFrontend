@@ -6,7 +6,8 @@
     "test": "echo \"No tests yet...\""
   },
   "dependencies": {
-    "parse-multipart": "^1.0.4"
+    "@azure/storage-blob": "^12.1.1",
+    "azure-storage": "^2.10.3"
   },
   "devDependencies": {}
 }
