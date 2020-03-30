@@ -2,17 +2,16 @@ import {
     Container,
     Grid
     } from '@material-ui/core';
-import axios from 'axios';
 import * as React from 'react';
 import { ArtCard } from '../../components';
-import { config, IArtItem } from '../../data/models';
+import { getArtDisplays, IArt } from '../../data/';
 import './Exhibition.css';
 
 const actionTitle = "Add a piece to the collection!";
 const actionSubtext = "I will print out any of the art you add onto poster paper and you can take it home after the party."
 
 interface IExhibitionState {
-    artItems: IArtItem[]
+    artItems: IArt[]
 }
 
 export default class Exhibition extends React.Component<any, IExhibitionState> {
@@ -23,16 +22,8 @@ export default class Exhibition extends React.Component<any, IExhibitionState> {
     }
 
     public componentDidMount = () => {
-        axios.get("artdisplays",
-        {
-            baseURL: config.baseUrl
-        }).then(res => {
-            console.log(res);
-            console.log(res.data);
-            if (!("error" in res.data)) {
-                console.log(res.data as IArtItem[]);
-                this.setState({ artItems: res.data });
-            }
+        getArtDisplays((arts: IArt[]) => {
+            this.setState({ artItems: arts });
         });
     }
 
@@ -43,11 +34,11 @@ export default class Exhibition extends React.Component<any, IExhibitionState> {
                     {this.state.artItems.map((item) => (
                     <Grid item={ true } key={ item.id } xs={12} sm={6}>
                         <ArtCard 
-                            imgUrl={ item.art_url }
-                            artName={ item.art_name }
-                            artistName={ item.artist_name }
-                            curatorName={ item.curator_name }
-                            curatorNotes={ item.curator_notes } />
+                            imgUrl={ item.blobUri }
+                            artName={ item.name }
+                            artistName={ item.artist }
+                            curatorName={ item.curator }
+                            curatorNotes={ item.curatorNotes } />
                     </Grid>
                     ))}
                     <Grid item={ true } key={ "add piece" } xs={12} sm={6}>

@@ -7,8 +7,8 @@ module.exports = async function (context, req) {
     var storageAccountName = process.env["ArtStorageAccount"]; // these can be defined in either app settings in the cloud, or through the local.settings.json file
     var storageAccountKey = process.env["ArtStorageAccountKey"];
 
-    context.res = { body : process.env };
-    return;
+    // context.res = { body : process.env };
+    // return;
 
     const blobServiceClient = await BlobServiceClient.fromConnectionString("DefaultEndpointsProtocol=https;AccountName=" + storageAccountName + ";AccountKey=" + storageAccountKey + ";EndpointSuffix=core.windows.net");
     const containerClient = await blobServiceClient.getContainerClient(core.blobContainer);
