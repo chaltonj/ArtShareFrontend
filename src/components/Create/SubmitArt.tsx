@@ -4,11 +4,9 @@ import {
     Grid
     }
     from '@material-ui/core';
-import axios from 'axios';
 import * as React from 'react';
-
-import { config, IArtItem } from 'src/data/models';
 import { ArtCard } from "../../components";
+import { IArt, submitArtDisplay } from '../../data';
 import AddArtDetails from "./AddArtDetails";
 import AddPersonalDetails from "./AddPersonalDetails";
 import "./Create.css";
@@ -43,7 +41,7 @@ export default class SubmitArt extends React.Component<any, ISubmitArtState> {
             artName: "tesseract #4",
             artistName: "Loki",
             curatorName: storedName ? storedName : "",
-            curatorNotes: "This shit is tight man, i don't care who you are.",
+            curatorNotes: "It represents our shattered sense of community in the face of capitalist-driven isolation. Looks like the work of Cindy Sherman or Frank Stella.",
             submitStage: SubmitStage.ChooseArt
         };
     }
@@ -67,27 +65,19 @@ export default class SubmitArt extends React.Component<any, ISubmitArtState> {
     };
 
     private submitArt = () => {
-        const formData = new FormData();
         if (this.state.artPhoto) {
-            formData.append("artPhoto", this.state.artPhoto.slice(), this.state.artPhoto.name);
+            submitArtDisplay(
+                this.state.artPhoto,
+                this.state.artName,
+                this.state.artistName,
+                this.state.curatorName,
+                this.state.curatorNotes,
+                (createdArtItem: IArt) => {
+                    localStorage.setItem(NameKey, createdArtItem.curator);
+                    window.location.replace("/");
+                }
+            )
         }
-        formData.append("artName", this.state.artName);
-        formData.append("artistName", this.state.artistName);
-        formData.append("curatorName", this.state.curatorName);
-        formData.append("curatorNotes", this.state.curatorNotes);
-        axios.post("/artdisplay",
-            formData,
-            {
-                headers: {
-                    'Content-Type': 'multipart/form-data'
-                },
-                baseURL: config.baseUrl
-            })
-            .then(res => {
-                const createdArtItem = res.data as IArtItem
-                localStorage.setItem(NameKey, createdArtItem.curator_name);
-                window.location.replace("/");
-            });
     };
 
     private handleBackPress = () => {

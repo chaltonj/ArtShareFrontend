@@ -1,4 +1,5 @@
 export { 
     IArt,
-    getArtDisplays
+    getArtDisplays,
+    submitArtDisplay
  } from "./AzFunctionClient"

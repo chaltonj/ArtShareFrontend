@@ -28,3 +28,34 @@ export function getArtDisplays(callback: (artItems: IArt[]) => void) {
         }
     });
 }
+
+export function submitArtDisplay(
+    photo: File,
+    name: string,
+    artist: string,
+    curator: string,
+    curatorNotes: string,
+    callback: (artItem: IArt) => void) {
+        const formData = new FormData();
+        formData.append("file", photo, photo.name);
+        formData.append("artName", name);
+        formData.append("artistName", artist);
+        formData.append("curatorName", curator);
+        formData.append("curatorNotes", curatorNotes);
+        axios.put("/api/art",
+            formData,
+            {
+                headers: {
+                    'Content-Type': 'multipart/form-data'
+                },
+                baseURL: baseUrl
+            })
+            .then(res => {
+                if (res.status === 200) {
+                    callback(res.data);
+                } else {
+                    console.log("failed put art: " + res);
+                }
+            });
+
+}
