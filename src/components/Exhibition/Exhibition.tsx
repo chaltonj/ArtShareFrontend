@@ -1,11 +1,6 @@
 import {
-    Card,
-    CardActionArea,
-    CardContent,
-    CardMedia,
     Container,
-    Grid,
-    Typography
+    Grid
     } from '@material-ui/core';
 import axios from 'axios';
 import * as React from 'react';
@@ -56,23 +51,11 @@ export default class Exhibition extends React.Component<any, IExhibitionState> {
                     </Grid>
                     ))}
                     <Grid item={ true } key={ "add piece" } xs={12} sm={6}>
-                        <Card className={ "exhbition__card" }>
-                            <CardActionArea className="exhibition_cardactionarea" href="/create">
-                            <CardMedia
-                                className={ "exhbition__cardmedia exhibition_plusbutton"}
-                                image={ "plus-512.png" }
-                                title={ "add art" }
-                            />
-                            <CardContent>
-                                <Typography gutterBottom={ true } variant="h5" component="h2" color="textPrimary">
-                                { actionTitle }
-                                </Typography>
-                                <Typography color="textSecondary">
-                                { actionSubtext }
-                                </Typography>
-                            </CardContent>
-                            </CardActionArea>
-                        </Card>
+                        <ArtCard
+                            imgUrl={ "plus-512.png" }
+                            artName={ actionTitle }
+                            artistName={ actionSubtext }
+                            href={ "/create" }/>
                     </Grid>
                 </Grid>
             </Container>

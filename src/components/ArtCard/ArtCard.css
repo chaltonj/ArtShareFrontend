@@ -5,3 +5,7 @@
 .artcard__cardmedia {
     padding-top: 100%;
 }
+
+.artcard__cardactionarea {
+    height: 100%;
+}

@@ -1,5 +1,6 @@
 import {
     Card,
+    CardActionArea,
     CardContent,
     CardMedia,
     Typography
@@ -14,7 +15,8 @@ interface IArtCardProps {
     artName: string,
     artistName: string,
     curatorName?: string,
-    curatorNotes?: string
+    curatorNotes?: string,
+    href?: string
 }
 
 export default class ArtCard extends React.Component<IArtCardProps> {
@@ -25,24 +27,29 @@ export default class ArtCard extends React.Component<IArtCardProps> {
         return (
             <React.Fragment>
                 <Card className={ "artcard__card" }>
-                    <CardMedia
-                        className={ "artcard__cardmedia"}
-                        image={ this.props.imgUrl }
-                        title={ this.props.artName }
-                    />
-                    <CardContent>
-                        <Typography gutterBottom={ true } variant="h5" component="h2" color="textPrimary">
-                        { this.props.artName }
-                        </Typography>
-                        <Typography color="textSecondary" paragraph={ true }>
-                        { this.props.artistName }
-                        </Typography>
-                        { shouldRenderCurator && 
-                            <Typography color="textSecondary">
-                                <Typography color="textPrimary" display="inline">{this.props.curatorName}:</Typography> "{this.props.curatorNotes}"
+                    <CardActionArea
+                        className={ "artcard__cardactionarea" }
+                        disabled={ !this.props.href }
+                        href={ this.props.href ? this.props.href : "" }>
+                        <CardMedia
+                            className={ "artcard__cardmedia"}
+                            image={ this.props.imgUrl }
+                            title={ this.props.artName }
+                        />
+                        <CardContent>
+                            <Typography gutterBottom={ true } variant="h5" component="h2" color="textPrimary">
+                            { this.props.artName }
                             </Typography>
-                        }
-                    </CardContent>
+                            <Typography color="textSecondary" paragraph={ true }>
+                            { this.props.artistName }
+                            </Typography>
+                            { shouldRenderCurator && 
+                                <Typography color="textSecondary">
+                                    <Typography color="textPrimary" display="inline">{this.props.curatorName}:</Typography> "{this.props.curatorNotes}"
+                                </Typography>
+                            }
+                        </CardContent>
+                    </CardActionArea>
                 </Card>
             </React.Fragment>
         );
