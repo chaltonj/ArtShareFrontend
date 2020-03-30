@@ -7,6 +7,7 @@ module.exports = async function (context, req) {
     var storageAccountName = process.env["ArtStorageAccount"]; // these can be defined in either app settings in the cloud, or through the local.settings.json file
     var storageAccountKey = process.env["ArtStorageAccountKey"];
 
+    // Making a PR to test stage site, hopefully will get a function with app settings that work...
     context.res = { body : process.env };
     return;
 
