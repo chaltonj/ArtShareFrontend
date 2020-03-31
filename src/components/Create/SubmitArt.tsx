@@ -1,6 +1,7 @@
 import {
     Box,
     Button,
+    CircularProgress,
     Grid
     }
     from '@material-ui/core';
@@ -14,6 +15,7 @@ import "./Create.css";
 enum SubmitStage {
     ChooseArt = 1,
     AddNotes,
+    Submitting
 }
 
 interface ISubmitArtState {
@@ -38,8 +40,8 @@ export default class SubmitArt extends React.Component<any, ISubmitArtState> {
         this.state = {
             artPhoto: undefined,
             artPhotoUrl: "",
-            artName: "tesseract #4",
-            artistName: "Loki",
+            artName: "",
+            artistName: "",
             curatorName: storedName ? storedName : "",
             curatorNotes: "It represents our shattered sense of community in the face of capitalist-driven isolation. Looks like the work of Cindy Sherman or Frank Stella.",
             submitStage: SubmitStage.ChooseArt
@@ -66,6 +68,7 @@ export default class SubmitArt extends React.Component<any, ISubmitArtState> {
 
     private submitArt = () => {
         if (this.state.artPhoto) {
+            this.setState({submitStage: SubmitStage.Submitting})
             submitArtDisplay(
                 this.state.artPhoto,
                 this.state.artName,
@@ -138,14 +141,19 @@ export default class SubmitArt extends React.Component<any, ISubmitArtState> {
                             </Button>
                         </Grid>
                         <Grid item>
-                            <Button
-                                className={ "create__button" }
-
-                                variant="contained"
-                                color="primary"
-                                onClick={ this.handleForwardPress }>
-                                { this.getButtonLabel(this.state.submitStage) }
-                            </Button>
+                            <div className="create__createbuttonwrapper">
+                                <Button
+                                    className={ "create__button" }
+                                    disabled={ this.state.submitStage === SubmitStage.Submitting}
+                                    variant="contained"
+                                    color="primary"
+                                    onClick={ this.handleForwardPress }>
+                                    { this.getButtonLabel(this.state.submitStage) }
+                                </Button>
+                                { this.state.submitStage === SubmitStage.Submitting &&
+                                    <CircularProgress size={36} className="create__createbuttonspinner" />
+                                }
+                            </div>
                         </Grid>
                     </Grid>
                 </Box> 
