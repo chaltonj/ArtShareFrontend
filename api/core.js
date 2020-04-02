@@ -38,6 +38,20 @@ exports.asyncForEach = async function(array, callback) {
 }
 
 // Table Storage Wrappers
+exports.retrieveEntity = async function(tableService, ...args) {
+    return new Promise((resolve, reject) => {
+        let promiseHandling = (err, result) => {
+            if (err) {
+                reject(err);
+            } else {
+                resolve(result);
+            }
+        };
+        args.push(promiseHandling);
+        tableService.retrieveEntity.apply(tableService, args);
+    });
+};
+
 exports.queryEntities = async function(tableService, ...args) {
     return new Promise((resolve, reject) => {
         let promiseHandling = (err, result) => {
