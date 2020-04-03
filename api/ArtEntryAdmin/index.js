@@ -21,26 +21,33 @@ module.exports = async function (context, req) {
 
     var rowKey = context.bindingData.entryId;
 
-    // List the entities that exist
-    // GET /art
-    if (req.method === "GET")
+    // DELETE an art entry
+    if (req.method === "DELETE")
     {
-        var correspondingEntry = await core.retrieveEntity(tableSvc, core.tableStorageName, core.tableStoragePartitionKey, rowKey);
-        if (correspondingEntry === null)
+        // First check that the entity is cleaned up from table storage
+        var task = {
+            PartitionKey: {'_': core.tableStoragePartitionKey},
+            RowKey: {'_': rowKey}
+        };
+
+        var deleteResponse = await core.deleteEntity(tableSvc, core.tableStorageName, task);
+        if (deleteResponse !== null && !deleteResponse.isSuccessful)
         {
-            context.res = { status : 404 };
+            context.res = {status: 500};
             return;
         }
-        
-        var apiObj = core.convertTableObjectToApiObject(correspondingEntry, storageAccountName);
-        context.res = { body : apiObj };
+
+        // Second, clear out the blob storage. Try both supported image types
+        var matchingBlobs = [];
+        for await (const blob of containerClient.listBlobsFlat({prefix: rowKey})) {
+            matchingBlobs.push(blob.name);
+        }
+
+        for (var i = 0; i < matchingBlobs.length; i++)
+        {
+            await containerClient.deleteBlob(matchingBlobs[i]);
+        }
+
         return;
     }
-
-    // TODO: future
-    // Delete an existing entity
-    // DELETE /art/{artId}
-
-    // Update an art entity's metadata
-    // POST /art/{artId}
 };

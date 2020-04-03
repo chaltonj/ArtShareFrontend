@@ -42,6 +42,12 @@ exports.retrieveEntity = async function(tableService, ...args) {
     return new Promise((resolve, reject) => {
         let promiseHandling = (err, result) => {
             if (err) {
+				if (err.code === "ResourceNotFound")
+				{
+					resolve(null);
+					return;
+				}
+
                 reject(err);
             } else {
                 resolve(result);
@@ -91,6 +97,26 @@ exports.insertEntity = async function(tableService, ...args) {
         };
         args.push(promiseHandling);
         tableService.insertEntity.apply(tableService, args);
+    });
+};
+
+exports.deleteEntity = async function(tableService, ...args) {
+    return new Promise((resolve, reject) => {
+        let promiseHandling = (err, result) => {
+            if (err) {
+				if (err.code === "ResourceNotFound")
+				{
+					resolve(null);
+					return;
+				}
+				
+                reject(err);
+            } else {
+                resolve(result);
+            }
+        };
+        args.push(promiseHandling);
+        tableService.deleteEntity.apply(tableService, args);
     });
 };
 
