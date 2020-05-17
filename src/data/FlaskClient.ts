@@ -95,3 +95,28 @@ export function getSubmissions(
             });
     }
 
+    export function submitSubmission(
+        photo: File,
+        userId: string,
+        callback: (submission: ISubmission) => void) {
+            const formData = new FormData();
+            formData.append("photo", photo, photo.name);
+            formData.append("user_id", userId);
+            formData.append("template_id", defaultTemplateId);
+            axios.put("/submission",
+                formData,
+                {
+                    headers: {
+                        'Content-Type': 'multipart/form-data'
+                    },
+                    baseURL: baseUrl
+                })
+                .then(res => {
+                    if (res.status === 200) {
+                        callback(res.data);
+                    } else {
+                        console.log("failed put submission: " + res);
+                    }
+                });
+    
+    }

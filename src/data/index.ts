@@ -10,5 +10,6 @@ export {
     IResponse,
     submitUser,
     getUser,
-    getSubmissions
+    getSubmissions,
+    submitSubmission
  } from "./FlaskClient"

@@ -49,6 +49,15 @@ export default class ReturningUser extends React.Component<IReturningUserProps, 
             });
     }
 
+    private reevaluateStage = () => {
+        getSubmissions(
+            this.props.userId,
+            (submissions: ISubmission[]) => {
+            const stage = this.getStageFromSubmissions(submissions, this.props.userId);
+            this.setState({ submissions, stage, isBusy: false });
+        });
+    }
+
     private getStageFromSubmissions = (
         submissions: ISubmission[],
         userId: string): Stage => {
@@ -76,9 +85,9 @@ export default class ReturningUser extends React.Component<IReturningUserProps, 
         });
     }
 
-    // private setIsBusy = (isBusy: boolean) => {
-    //     this.setState({isBusy});
-    // }
+    private setIsBusy = (isBusy: boolean): void => {
+        this.setState({isBusy});
+    }
 
     public render() {
         return (
@@ -87,7 +96,7 @@ export default class ReturningUser extends React.Component<IReturningUserProps, 
                     this.state.isBusy 
                         ? <Loading />
                         : this.state.stage === Stage.CreateSubmission
-                            ? <NewSubmission />
+                            ? <NewSubmission userId={ this.props.userId } setIsBusy={ this.setIsBusy } onFinish={ this.reevaluateStage } />
                             : this.state.stage === Stage.CreateResponses
                                 ? <NewResponses />
                                 : <ViewSubmissions />
