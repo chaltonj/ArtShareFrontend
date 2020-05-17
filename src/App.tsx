@@ -9,9 +9,7 @@ import {
   Route,
   Switch,
 } from "react-router-dom";
-import CreateContainer from "./components/Create/CreateContainer";
-import Exhibition from "./components/Exhibition/Exhibition";
-import Introduction from "./components/Introduction/Introduction";
+import NewUser from "./components/NewUser/NewUser";
 
 import './App.css';
 
@@ -24,12 +22,11 @@ class App extends React.Component {
         <Container className="app__routercontainer">
           <Router>
             <Switch>
-              <Route path="/create">
-                <CreateContainer />
-              </Route>
+              {/* <Route path="/:userid">
+                <ReturningUser />
+              </Route> */}
               <Route path="/">
-                <Introduction />
-                <Exhibition />
+                <NewUser />
               </Route>
             </Switch>
           </Router>
