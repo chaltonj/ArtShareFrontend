@@ -8,13 +8,19 @@ import {
   BrowserRouter as Router,
   Route,
   Switch,
+  useParams
 } from "react-router-dom";
 import NewUser from "./components/NewUser/NewUser";
 
 import './App.css';
+import ReturningUser from './components/ReturningUser/ReturningUser';
+
+function ReturningUserWrapper() {
+  const { userId } = useParams();
+  return <ReturningUser userId={ userId ? userId.valueOf() : "" } />;
+}
 
 class App extends React.Component {
-
   public render() {
     return (
       <div className="App">
@@ -22,9 +28,9 @@ class App extends React.Component {
         <Container className="app__routercontainer">
           <Router>
             <Switch>
-              {/* <Route path="/:userid">
-                <ReturningUser />
-              </Route> */}
+              <Route path="/:userId">
+                <ReturningUserWrapper />
+              </Route>
               <Route path="/">
                 <NewUser />
               </Route>

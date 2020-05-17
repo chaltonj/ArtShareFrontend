@@ -6,5 +6,9 @@ export {
 
  export { 
     IUser,
-    submitUser
+    ISubmission,
+    IResponse,
+    submitUser,
+    getUser,
+    getSubmissions
  } from "./FlaskClient"

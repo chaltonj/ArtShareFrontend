@@ -1,8 +1,8 @@
 import * as React from 'react';
+import Loading from "../Loading/Loading";
+import "./NewUser.css";
 import StaticWelcome from "./StaticWelcome";
 import UserDetails from './UserDetails';
-
-import "./NewUser.css";
 
 enum Stage {
     Welcome = 1,
@@ -14,7 +14,7 @@ interface INewUserState {
     isBusy: boolean
 }
 
-export default class SubmitArt extends React.Component<any, INewUserState> {
+export default class NewUser extends React.Component<any, INewUserState> {
     constructor(props: any) {
         super(props);
 
@@ -35,13 +35,13 @@ export default class SubmitArt extends React.Component<any, INewUserState> {
     public render() {
         return (
             <React.Fragment>
-                {this.state.stage === Stage.Welcome ? (
-                    <StaticWelcome
-                        moveOn={ this.onGetStarted } />
-                ) : (
-                    <UserDetails 
-                        setIsBusy={ this.setIsBusy } />
-                )}
+                {
+                    this.state.isBusy 
+                        ? <Loading />
+                        : this.state.stage === Stage.Welcome
+                            ? <StaticWelcome moveOn={ this.onGetStarted } />
+                            : <UserDetails setIsBusy={ this.setIsBusy } />
+                }
             </React.Fragment>
         );
     }

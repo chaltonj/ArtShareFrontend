@@ -7,36 +7,48 @@ const baseUrl =  process.env.NODE_ENV === 'development'
     ? "http://0.0.0.0:8000"
     :  "https://artshare-backend-b2.azurewebsites.net";
 
-// export interface IArt {
-//     id: number;
-//     lastModifiedOn: Date;
-//     blobUri: string;
-//     name: string;
-//     artist: string;
-//     curator: string;
-//     curatorNotes: string;
-// }
-
-// export function getArtDisplays(callback: (artItems: IArt[]) => void) {
-//     axios.get("api/art",
-//     {
-//         baseURL: baseUrl
-//     }).then(res => {
-//         console.log(res);
-//         console.log(res.data);
-//         if (!("error" in res.data)) {
-//             console.log(res.data as IArt[]);
-//             callback(res.data);
-//         }
-//     });
-// }
-
 export interface IUser {
     name: string,
     phone_number: string,
     template_id: string,
     user_id: string
 }
+
+export interface ISubmission {
+    photo_url: string,
+    submission_id: string,
+    template_id: string,
+    user_id: string,
+    responses?: IResponse[]
+}
+
+export interface IResponse {
+    response_id: string,
+    submission_id: string,
+    template_id: string,
+    text: string,
+    user_id: string
+}
+
+export function getUser(
+    userId: string,
+    callback: (user: IUser) => void) {
+        const queryParams = {
+            user_id: userId,
+            template_id: defaultTemplateId
+        };
+        axios.get("/user",
+            {
+                baseURL: baseUrl,
+                params: queryParams
+            }).then(res => {
+                if (res.status === 200) {
+                    callback(res.data);
+                } else {
+                    console.log("failed get user: " + res);
+                }
+            });
+    }
 
 export function submitUser(
     name: string,
@@ -62,3 +74,24 @@ export function submitUser(
                 }
             });
 }
+
+export function getSubmissions(
+    userId: string,
+    callback: (submissions: ISubmission[]) => void) {
+        const queryParams = {
+            user_id: userId,
+            template_id: defaultTemplateId
+        };
+        axios.get("/submissions",
+            {
+                baseURL: baseUrl,
+                params: queryParams
+            }).then(res => {
+                if (res.status === 200) {
+                    callback(res.data);
+                } else {
+                    console.log("failed get submissions: " + res);
+                }
+            });
+    }
+
