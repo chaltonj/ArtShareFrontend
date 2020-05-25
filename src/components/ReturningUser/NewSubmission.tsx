@@ -1,9 +1,9 @@
-import { Typography, Container, Grid, Button }from '@material-ui/core';
+import { Button, Container, Grid, Typography } from '@material-ui/core';
 import * as React from 'react';
 import "regenerator-runtime";
 // tslint:disable-next-line:ordered-imports
 import { DropzoneArea } from 'material-ui-dropzone';
-import { submitSubmission, ISubmission } from "../../data";
+import { ISubmission, submitSubmission } from "../../data";
 
 import "./ReturningUser.css";
 

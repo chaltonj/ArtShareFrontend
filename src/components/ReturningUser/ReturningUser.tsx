@@ -21,6 +21,7 @@ interface IReturningUserState {
     user?: IUser,
     stage: Stage,
     isBusy: boolean,
+    finishedResponses: boolean,
     submissions: ISubmission[]
 }
 
@@ -32,6 +33,7 @@ export default class ReturningUser extends React.Component<IReturningUserProps, 
             stage: Stage.CreateSubmission,
             user: undefined,
             isBusy: true,
+            finishedResponses: false,
             submissions: []
         };
     }
@@ -43,8 +45,9 @@ export default class ReturningUser extends React.Component<IReturningUserProps, 
                 getSubmissions(
                     this.props.userId,
                     (submissions: ISubmission[]) => {
-                    const stage = this.getStageFromSubmissions(submissions, this.props.userId);
-                    this.setState({ user, submissions, stage, isBusy: false });
+                        submissions = this.orderSubmissions(submissions);
+                        const stage = this.getStageFromSubmissions(submissions, this.props.userId, false);
+                        this.setState({ user, submissions, stage, isBusy: false });
                 });
             });
     }
@@ -53,17 +56,23 @@ export default class ReturningUser extends React.Component<IReturningUserProps, 
         getSubmissions(
             this.props.userId,
             (submissions: ISubmission[]) => {
-            const stage = this.getStageFromSubmissions(submissions, this.props.userId);
-            this.setState({ submissions, stage, isBusy: false });
+                submissions = this.orderSubmissions(submissions);
+                const stage = this.getStageFromSubmissions(submissions, this.props.userId, this.state.finishedResponses);
+                this.setState({ submissions, stage, isBusy: false });
         });
+    }
+
+    private orderSubmissions = (submissions: ISubmission[]): ISubmission[] => {
+        return submissions.sort(() => Math.random() - 0.5);
     }
 
     private getStageFromSubmissions = (
         submissions: ISubmission[],
-        userId: string): Stage => {
+        userId: string,
+        hasFinishedResponses: boolean): Stage => {
         if (!this.getUserSubmission(submissions, userId)) {
             return Stage.CreateSubmission;
-        } else if (this.getNonRespondedSubmissions(submissions, userId).length > 0) {
+        } else if (this.getNonRespondedSubmissions(submissions, userId).length > 0 && !hasFinishedResponses) {
             return Stage.CreateResponses;
         } else {
             return Stage.ViewSubmissions;
@@ -80,9 +89,15 @@ export default class ReturningUser extends React.Component<IReturningUserProps, 
         submissions: ISubmission[],
         userId: string): ISubmission[] => {
         return submissions.filter( (submission: ISubmission) => {
+            const isMySubmission = submission.user_id === userId;
             const hasResponded = submission.responses?.some((response: IResponse) => response.user_id === userId );
-            return !hasResponded;
+            return !hasResponded && !isMySubmission;
         });
+    }
+
+    private onFinishNewResponses = () => {
+        this.setState({ finishedResponses: true, isBusy: true });
+        this.reevaluateStage();
     }
 
     private setIsBusy = (isBusy: boolean): void => {
@@ -98,8 +113,8 @@ export default class ReturningUser extends React.Component<IReturningUserProps, 
                         : this.state.stage === Stage.CreateSubmission
                             ? <NewSubmission userId={ this.props.userId } setIsBusy={ this.setIsBusy } onFinish={ this.reevaluateStage } />
                             : this.state.stage === Stage.CreateResponses
-                                ? <NewResponses />
-                                : <ViewSubmissions />
+                                ? <NewResponses userId={ this.props.userId } submissions={ this.getNonRespondedSubmissions(this.state.submissions, this.props.userId) } onFinish={ this.onFinishNewResponses } />
+                                : <ViewSubmissions submissions={ this.state.submissions } />
                 }   
             </React.Fragment>
         );

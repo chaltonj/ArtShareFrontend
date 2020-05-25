@@ -20,6 +20,7 @@ export interface ISubmission {
     template_id: string,
     user_id: string,
     responses?: IResponse[]
+    user?: IUser
 }
 
 export interface IResponse {
@@ -27,7 +28,8 @@ export interface IResponse {
     submission_id: string,
     template_id: string,
     text: string,
-    user_id: string
+    user_id: string,
+    user?: IUser
 }
 
 export function getUser(
@@ -119,4 +121,31 @@ export function getSubmissions(
                     }
                 });
     
+    }
+
+    export function submitResponse(
+        userId: string,
+        submissionId: string,
+        text: string,
+        callback: (response: IResponse) => void) {
+            const formData = new FormData();
+            formData.append("user_id", userId);
+            formData.append("submission_id", submissionId);
+            formData.append("template_id", defaultTemplateId);
+            formData.append("text", text)
+            axios.put("/response",
+                formData,
+                {
+                    headers: {
+                        'Content-Type': 'multipart/form-data'
+                    },
+                    baseURL: baseUrl
+                })
+                .then(res => {
+                    if (res.status === 200) {
+                        callback(res.data);
+                    } else {
+                        console.log("failed put user: " + res);
+                    }
+                });
     }
