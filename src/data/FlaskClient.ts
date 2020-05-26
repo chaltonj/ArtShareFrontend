@@ -6,6 +6,7 @@ const defaultTemplateId = "InitialTemplate";
 const baseUrl =  process.env.NODE_ENV === 'development'
     ? "http://0.0.0.0:8000"
     :  "https://artshare-backend-b2.azurewebsites.net";
+// const baseUrl = "https://artshare-backend-b2.azurewebsites.net";
 
 export interface IUser {
     name: string,
@@ -34,7 +35,8 @@ export interface IResponse {
 
 export function getUser(
     userId: string,
-    callback: (user: IUser) => void) {
+    callback: (user: IUser) => void,
+    onFailure: () => void) {
         const queryParams = {
             user_id: userId,
             template_id: defaultTemplateId
@@ -49,6 +51,8 @@ export function getUser(
                 } else {
                     console.log("failed get user: " + res);
                 }
+            }).catch((reason: any) => {
+                onFailure();
             });
     }
 

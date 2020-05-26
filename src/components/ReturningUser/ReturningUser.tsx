@@ -49,6 +49,10 @@ export default class ReturningUser extends React.Component<IReturningUserProps, 
                         const stage = this.getStageFromSubmissions(submissions, this.props.userId, false);
                         this.setState({ user, submissions, stage, isBusy: false });
                 });
+            },
+            () => {
+                console.log("setup failed");
+                window.location.replace("/");
             });
     }
 
