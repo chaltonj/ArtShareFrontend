@@ -67,7 +67,7 @@ export default class NewResponses extends React.Component<INewResponsesProps, IN
         if (newIndex >= this.props.submissions.length) {
             this.props.onFinish();
         } else {
-            this.setState({ index: newIndex });
+            this.setState({ index: newIndex, response: "" });
         }
     }
 
