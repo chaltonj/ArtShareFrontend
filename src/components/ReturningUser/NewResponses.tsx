@@ -18,6 +18,7 @@ interface INewResponsesState {
 }
 
 const message: string = "Now caption everyone else's submissions!";
+const subMessage: string = "(there's points for funniest)";
 const nextButtonLabel: string = "Skip";
 const captionHint: string = "Caption";
 export default class NewResponses extends React.Component<INewResponsesProps, INewResponsesState> {
@@ -88,6 +89,9 @@ export default class NewResponses extends React.Component<INewResponsesProps, IN
                 <Grid container direction="column">
                     <Typography variant="h4" align="center" color="textPrimary">
                         { message }
+                    </Typography>
+                    <Typography variant="h6" align="center" color="textSecondary">
+                        { subMessage }
                     </Typography>
                     <Typography color="textSecondary">
                         { this.getIndexText() }

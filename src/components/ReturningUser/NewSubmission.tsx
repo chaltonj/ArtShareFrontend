@@ -10,10 +10,11 @@ import "./ReturningUser.css";
 const leadInMessageFirstLine: string = "Upload a childhood photo of yourself.";
 const leadInMessageSecondLine: string = "(there's points for cutest)";
 const submitButtonLabel: string = "Submit";
+const loadingMessage: string = "Sorry, this takes a really long time because I'm paying very little on hosting fees.";
 
 interface INewSubmissionProps {
     userId: string,
-    setIsBusy: (isBusy: boolean) => void,
+    setIsBusy: (isBusy: boolean, loadingMessage?: string) => void,
     onFinish: () => void
 }
 
@@ -32,7 +33,7 @@ export default class NewSubmission extends React.Component<INewSubmissionProps, 
 
     private submitPhoto = () => {
         if (this.state.photo) {
-            this.props.setIsBusy(true);
+            this.props.setIsBusy(true, loadingMessage);
             submitSubmission(
                 this.state.photo,
                 this.props.userId,

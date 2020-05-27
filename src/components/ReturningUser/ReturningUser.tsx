@@ -21,8 +21,10 @@ interface IReturningUserState {
     user?: IUser,
     stage: Stage,
     isBusy: boolean,
+    loadingMessage: string,
     finishedResponses: boolean,
-    submissions: ISubmission[]
+    submissions: ISubmission[],
+    preloadIndex: number
 }
 
 export default class ReturningUser extends React.Component<IReturningUserProps, IReturningUserState> {
@@ -33,8 +35,10 @@ export default class ReturningUser extends React.Component<IReturningUserProps, 
             stage: Stage.CreateSubmission,
             user: undefined,
             isBusy: true,
+            loadingMessage: "",
             finishedResponses: false,
-            submissions: []
+            submissions: [],
+            preloadIndex: 1
         };
     }
 
@@ -104,8 +108,13 @@ export default class ReturningUser extends React.Component<IReturningUserProps, 
         this.reevaluateStage();
     }
 
-    private setIsBusy = (isBusy: boolean): void => {
-        this.setState({isBusy});
+    private setIsBusy = (isBusy: boolean, loadingMessage?: string): void => {
+        loadingMessage = loadingMessage ?? "";
+        this.setState({isBusy, loadingMessage});
+    }
+
+    private onFinishPreload = () => {
+        this.setState({preloadIndex: this.state.preloadIndex + 1})
     }
 
     public render() {
@@ -113,14 +122,18 @@ export default class ReturningUser extends React.Component<IReturningUserProps, 
             <React.Fragment>
                 {
                     this.state.isBusy 
-                        ? <Loading />
+                        ? <Loading message={ this.state.loadingMessage } />
                         : this.state.stage === Stage.CreateSubmission
                             ? <NewSubmission userId={ this.props.userId } setIsBusy={ this.setIsBusy } onFinish={ this.reevaluateStage } />
                             : this.state.stage === Stage.CreateResponses
                                 ? <NewResponses userId={ this.props.userId } submissions={ this.getNonRespondedSubmissions(this.state.submissions, this.props.userId) } onFinish={ this.onFinishNewResponses } />
                                 : <ViewSubmissions submissions={ this.state.submissions } />
-                }   
+                }
+                { this.state.submissions.slice(0, this.state.preloadIndex).map((item, i) =>
+                    <link key={ item.submission_id } rel="preload" as="image" href={ item.photo_url } onLoad={ this.onFinishPreload } />
+                )}
             </React.Fragment>
+            
         );
     }
 }
