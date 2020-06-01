@@ -14,7 +14,3 @@ export {
     submitSubmission,
     submitResponse
  } from "./FlaskClient"
-
- export {
-    sendSMS
- } from "./SmsClient";
