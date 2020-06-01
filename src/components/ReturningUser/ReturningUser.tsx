@@ -61,17 +61,26 @@ export default class ReturningUser extends React.Component<IReturningUserProps, 
     }
 
     private reevaluateStage = () => {
+        const previousSubmissions = this.state.submissions;
         getSubmissions(
             this.props.userId,
             (submissions: ISubmission[]) => {
-                submissions = this.orderSubmissions(submissions);
+                submissions = this.orderSubmissions(submissions, previousSubmissions);
                 const stage = this.getStageFromSubmissions(submissions, this.props.userId, this.state.finishedResponses);
                 this.setState({ submissions, stage, isBusy: false });
         });
     }
 
-    private orderSubmissions = (submissions: ISubmission[]): ISubmission[] => {
-        return submissions.sort(() => Math.random() - 0.5);
+    private orderSubmissions = (submissions: ISubmission[], previousSubmissions?: ISubmission[]): ISubmission[] => {
+        if (!previousSubmissions) {
+            return submissions.sort(() => Math.random() - 0.5);
+        } else {
+            return submissions.sort((a: ISubmission, b: ISubmission) => {
+                const aIndex = previousSubmissions.findIndex((x: ISubmission) => x.submission_id === a.submission_id);
+                const bIndex = previousSubmissions.findIndex((x: ISubmission) => x.submission_id === b.submission_id);
+                return aIndex - bIndex;
+            });
+        }
     }
 
     private getStageFromSubmissions = (

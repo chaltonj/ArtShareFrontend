@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const defaultTemplateId = "AltonjiTemplate";
+const defaultTemplateId = "AltonjiTemplate2";
 
 // assuming the base url might work in prod. Not sure.
 const baseUrl =  process.env.NODE_ENV === 'development'
