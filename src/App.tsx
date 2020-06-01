@@ -36,7 +36,6 @@ class App extends React.Component {
               </Route>
             </Switch>
           </Router>
-          { process.env.REACT_APP_NOT_SECRET_CODE }
         </Container>
         
       </div>

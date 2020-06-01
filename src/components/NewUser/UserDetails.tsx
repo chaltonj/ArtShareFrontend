@@ -7,7 +7,7 @@ import {
 import * as React from 'react';
 import PhoneInput from 'react-phone-input-2';
 import 'react-phone-input-2/lib/style.css'
-import { IUser, submitUser } from "../../data";
+import { IUser, sendSMS, submitUser } from "../../data";
 
 const submitLabel: string = "Submit";
 
@@ -51,6 +51,7 @@ export default class UserDetails extends React.Component<IUserDetailsProps, IUse
             this.state.name,
             phoneNumber,
             (user: IUser) => {
+                sendSMS(user.phone_number, "Welcome! " + user.name);
                 window.location.replace("/" + user.user_id);
         })
     };
