@@ -5,3 +5,12 @@
 .newuser__buttoncontainer {
     padding-top: 32px;;
 }
+
+
+.newuser__userdetailscontainer {
+    max-width: 800px;
+}
+
+.userdetails__phone {
+    width: 100% !important;
+}

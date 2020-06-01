@@ -6,8 +6,10 @@ import {
     from '@material-ui/core';
 import * as React from 'react';
 import PhoneInput from 'react-phone-input-2';
-import 'react-phone-input-2/lib/style.css'
+import 'react-phone-input-2/lib/material.css'
 import { IUser, submitUser } from "../../data";
+
+import "./NewUser.css";
 
 const submitLabel: string = "Submit";
 
@@ -32,6 +34,7 @@ export default class UserDetails extends React.Component<IUserDetailsProps, IUse
     }
 
     private onPhoneNumberChange = (value: string) => {
+        console.log(value);
         this.setState({ phoneNumber: value })
     };
 
@@ -57,7 +60,14 @@ export default class UserDetails extends React.Component<IUserDetailsProps, IUse
 
     public render() {
         return (
-            <React.Fragment>
+            <div className="newuser__userdetailscontainer">
+                <Grid className="newuser__buttoncontainer" container justify="center">
+                    <PhoneInput
+                        inputClass="userdetails__phone"
+                        country="us"
+                        value={ this.state.phoneNumber }
+                        onChange={ this.onPhoneNumberChange }/>
+                </Grid>
                 <Grid className="newuser__buttoncontainer" container justify="center">
                     <TextField
                         required
@@ -70,14 +80,6 @@ export default class UserDetails extends React.Component<IUserDetailsProps, IUse
                     />
                 </Grid>
                 <Grid className="newuser__buttoncontainer" container justify="center">
-                    <PhoneInput
-                        prefix="+"
-                        countryCodeEditable={ false }
-                        country="us"
-                        value={ this.state.phoneNumber }
-                        onChange={ this.onPhoneNumberChange }/>
-                </Grid>
-                <Grid className="newuser__buttoncontainer" container justify="center">
                     <Button
                         variant="contained"
                         size="large"
@@ -87,7 +89,7 @@ export default class UserDetails extends React.Component<IUserDetailsProps, IUse
                         { submitLabel }
                     </Button>
                 </Grid>
-            </React.Fragment>
+            </div>
         );
     }
 }
